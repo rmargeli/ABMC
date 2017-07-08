@@ -26,24 +26,27 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class FillDataExampleController implements Initializable {
 
     @FXML
-    private Label lbl_name_value;
+    private TextField txt_name_value;
     @FXML
-    private Label lbl_lastname_value;
+    private TextField txt_lastname_value;
     @FXML
-    private Label lbl_address_value;
+    private TextField txt_address_value;
     @FXML
-    private Label lbl_phone_value;
+    private TextField txt_phone_value;
     @FXML
-    private Label lbl_cell_value;
+    private TextField txt_cell_value;
     @FXML
-    private Label lbl_email_value;
+    private TextField txt_email_value;
     @FXML
     private Button btn_nuevo;
+    @FXML
+    private Button btn_grabar;
     @FXML
     private Button btn_editar;
     @FXML
@@ -79,6 +82,13 @@ public class FillDataExampleController implements Initializable {
                 (observable, oldValue, newValue) -> cargarPersonaSeleccionada(newValue));
 
         tbl_personas.setItems(data);
+                txt_name_value.setDisable(true);
+        txt_lastname_value.setDisable(true);
+        txt_address_value.setDisable(true);
+        txt_phone_value.setDisable(true);
+        txt_cell_value.setDisable(true);
+        txt_email_value.setDisable(true);
+        btn_grabar.setDisable(true);
 
     }
 
@@ -89,6 +99,22 @@ public class FillDataExampleController implements Initializable {
     @FXML
     private void personaNuevo(ActionEvent event) {
         cargarPersonaSeleccionada(null);
+        btn_grabar.setDisable(false);
+    }
+    
+    @FXML
+    private void grabarPersona(){
+        if(txt_name_value != null && txt_lastname_value != null){
+           Persona p = new Persona(txt_name_value.getText(), txt_lastname_value.getText(), txt_address_value.getText(), txt_phone_value.getText(), txt_cell_value.getText(), txt_email_value.getText());
+           data.add(p);
+           tbl_personas.setItems(data);  
+           cargarPersonaSeleccionada(p);
+           btn_editar.setDisable(false);
+           btn_grabar.setDisable(true);
+           btn_borrar.setDisable(false);
+        }
+        
+        
     }
 
     @FXML
@@ -110,7 +136,7 @@ public class FillDataExampleController implements Initializable {
     private void eliminarPersona() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmacion");
-        alert.setHeaderText("Esta a punto de eliminar el Auto...");
+        alert.setHeaderText("Esta a punto de eliminar la persona...");
         alert.setContentText("desea continuar?");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
@@ -129,24 +155,38 @@ public class FillDataExampleController implements Initializable {
 
     private void cargarPersonaSeleccionada(Persona p) {
         if (p != null) {
-            lbl_name_value.setText(p.getNombre());
-            lbl_lastname_value.setText(p.getApellido());
-            lbl_address_value.setText(p.getDireccion());
-            lbl_phone_value.setText(p.getTelefono());
-            lbl_cell_value.setText(p.getCelular());
-            lbl_email_value.setText(p.getEmail());
+            txt_name_value.setText(p.getNombre());
+            txt_lastname_value.setText(p.getApellido());
+            txt_address_value.setText(p.getDireccion());
+            txt_phone_value.setText(p.getTelefono());
+            txt_cell_value.setText(p.getCelular());
+            txt_email_value.setText(p.getEmail());
+            txt_name_value.setDisable(true);
+            txt_lastname_value.setDisable(true);
+            txt_address_value.setDisable(true);
+            txt_phone_value.setDisable(true);
+            txt_cell_value.setDisable(true);
+            txt_email_value.setDisable(true);
         } else {
-            lbl_name_value.setText("");
-            lbl_lastname_value.setText("");
-            lbl_address_value.setText("");
-            lbl_phone_value.setText("");
-            lbl_cell_value.setText("");
-            lbl_email_value.setText("");
+            txt_name_value.setText("");            
+            txt_lastname_value.setText("");
+            txt_address_value.setText("");
+            txt_phone_value.setText("");
+            txt_cell_value.setText("");
+            txt_email_value.setText("");
+            txt_name_value.setDisable(false);
+            txt_lastname_value.setDisable(false);
+            txt_address_value.setDisable(false);
+            txt_phone_value.setDisable(false);
+            txt_cell_value.setDisable(false);
+            txt_email_value.setDisable(false);
+            btn_editar.setDisable(true);
+            btn_borrar.setDisable(true);
         }
-        btn_editar.setDisable(false);
-        btn_borrar.setDisable(false);
-    }
 
+        
+    }    
+  
     @FXML
     private void handlerBtnExit(ActionEvent event) {
         Platform.exit();
